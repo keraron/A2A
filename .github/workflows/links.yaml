@@ -9,7 +9,6 @@ on:
 jobs:
   linkChecker:
     runs-on: ubuntu-latest
-    if: github.repository == 'a2aproject/A2A'
     permissions:
       issues: write
 
@@ -76,7 +75,8 @@ jobs:
           token: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Create Issue on Failure
-        if: failure() && steps.lychee.outcome == 'failure' && github.event_name == 'schedule'
+        if: failure() && steps.lychee.outcome == 'failure' && (github.event_name == 'schedule' || github.event_name == 'workflow_dispatch')
+
         uses: peter-evans/create-issue-from-file@v6
         with:
           title: Link Checker Report
